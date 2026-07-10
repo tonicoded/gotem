@@ -227,6 +227,38 @@
         font-size: 20px;
       }
 
+      .gotem-store-row {
+        position: relative;
+        z-index: 2;
+        display: flex;
+        align-items: stretch;
+        gap: 12px;
+        margin-top: 22px;
+      }
+
+      .gotem-store-badge {
+        display: grid;
+        grid-template-columns: 38px 1fr;
+        align-items: center;
+        min-width: 202px;
+        min-height: 64px;
+        padding: 8px 16px;
+        color: #fff;
+        background: #080808;
+        border: 1px solid #080808;
+        border-radius: 14px;
+        box-shadow: 0 13px 30px rgba(0,0,0,.16);
+        user-select: none;
+        transition: transform .2s ease, box-shadow .2s ease, opacity .2s ease;
+      }
+
+      .gotem-store-badge:hover { transform: translateY(-2px); box-shadow: 0 18px 38px rgba(0,0,0,.22); }
+      .gotem-store-badge--next { opacity: .72; }
+      .gotem-store-badge svg { width: 33px; height: 36px; overflow: visible; }
+      .gotem-store-copy { display: flex; flex-direction: column; align-items: flex-start; gap: 2px; font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; line-height: 1; }
+      .gotem-store-copy small { font-size: 10px; font-weight: 500; letter-spacing: .025em; }
+      .gotem-store-copy strong { font-size: 21px; font-weight: 600; letter-spacing: -.035em; white-space: nowrap; }
+
       .gotem-proof {
         margin-top: 42px;
         display: flex;
@@ -820,6 +852,8 @@
       .gotem-final h2 { position: relative; max-width: 930px; margin: 0 auto; font-size: clamp(65px, 10vw, 140px); font-weight: 400; line-height: .77; letter-spacing: -.04em; }
       .gotem-final p { position: relative; margin: 30px 0; color: #aaa9a4; font-size: 23px; }
       .gotem-final .gotem-primary-cta { position: relative; color: #080808 !important; background: #fff; }
+      .gotem-final .gotem-store-row { justify-content: center; margin-top: 30px; }
+      .gotem-final .gotem-store-badge { color: #080808; background: #fff; border-color: #fff; box-shadow: 0 17px 42px rgba(0,0,0,.40); }
 
       .gotem-ball-row { position: relative; margin: 70px auto 110px; display: flex; justify-content: center; align-items: center; gap: clamp(9px, 2vw, 25px); }
       .gotem-ball-row img { width: clamp(58px, 8vw, 112px); filter: drop-shadow(0 19px 23px rgba(0,0,0,.52)); transition: transform .25s ease; }
@@ -897,6 +931,7 @@
         .gotem-hero-grid { grid-template-columns: 1fr; text-align: center; }
         .gotem-hero-copy { margin-inline: auto; }
         .gotem-hero-actions, .gotem-proof { justify-content: center; }
+        .gotem-store-row { justify-content: center; }
         .gotem-phone { width: min(100%, 520px); }
         .gotem-scroll-cue { display: none; }
         .gotem-process-grid { grid-template-columns: 1fr; }
@@ -946,6 +981,14 @@
         .gotem-footer-links { justify-content: center; margin-top: 14px; flex-wrap: wrap; }
       }
 
+      @media (max-width: 540px) {
+        .gotem-store-row { width: 100%; gap: 8px; }
+        .gotem-store-badge { flex: 1 1 0; grid-template-columns: 29px 1fr; min-width: 0; min-height: 58px; padding: 7px 9px; border-radius: 12px; }
+        .gotem-store-badge svg { width: 27px; height: 31px; }
+        .gotem-store-copy small { font-size: 8px; }
+        .gotem-store-copy strong { font-size: 17px; }
+      }
+
       @media (prefers-reduced-motion: reduce) {
         .gotem-landing *, .gotem-landing *::before, .gotem-landing *::after { animation-duration: .001ms !important; animation-iteration-count: 1 !important; scroll-behavior: auto !important; }
         .gotem-battle-stage { display: none; }
@@ -981,7 +1024,17 @@
             <p class="gotem-hero-copy">Point your camera at a real animal. gotem uses AI to turn that exact encounter into a one-of-one collectible card—with its own name, abilities, rarity, and battle stats.</p>
             <div class="gotem-hero-actions">
               <a class="gotem-primary-cta" href="#how-it-works"><span>see the hunt</span><span aria-hidden="true">↓</span></a>
-              <span class="gotem-coming">built for iPhone · coming soon</span>
+              <span class="gotem-coming">iOS first · Android next</span>
+            </div>
+            <div class="gotem-store-row" aria-label="gotem mobile release platforms">
+              <span class="gotem-store-badge" aria-label="Download on the App Store — coming first">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M17.05 12.54c-.03-3.14 2.57-4.67 2.69-4.74-1.47-2.15-3.76-2.44-4.57-2.46-1.92-.2-3.79 1.15-4.77 1.15-1 0-2.5-1.13-4.13-1.1-2.09.03-4.04 1.24-5.11 3.13-2.21 3.83-.56 9.46 1.55 12.56 1.06 1.51 2.29 3.2 3.92 3.14 1.59-.07 2.19-1.01 4.12-1.01 1.91 0 2.47 1.01 4.13.97 1.71-.03 2.79-1.52 3.81-3.04 1.22-1.73 1.71-3.43 1.73-3.52-.04-.01-3.28-1.25-3.31-5.08ZM13.92 3.3A4.58 4.58 0 0 0 14.97 0a4.67 4.67 0 0 0-3.02 1.57 4.38 4.38 0 0 0-1.08 3.17 3.86 3.86 0 0 0 3.05-1.44Z"/></svg>
+                <span class="gotem-store-copy"><small>Download on the</small><strong>App Store</strong></span>
+              </span>
+              <span class="gotem-store-badge gotem-store-badge--next" aria-label="Coming next on Google Play">
+                <svg viewBox="0 0 32 36" aria-hidden="true"><path fill="#34a853" d="M1.3 1.1A3 3 0 0 0 .5 3.2v29.6c0 .8.3 1.5.8 2.1L18 18 1.3 1.1Z"/><path fill="#4285f4" d="m23.5 12.4-5.5 5.5L1.3 1.1c.5-.4 1.2-.5 1.9-.1l20.3 11.4Z"/><path fill="#fbbc04" d="M31 16.6 23.5 12.4 18 18l5.5 5.6 7.5-4.2c1.1-.6 1.1-2.2 0-2.8Z"/><path fill="#ea4335" d="M3.2 35c-.7.4-1.4.3-1.9-.1L18 18l5.5 5.6L3.2 35Z"/></svg>
+                <span class="gotem-store-copy"><small>Coming next on</small><strong>Google Play</strong></span>
+              </span>
             </div>
             <div class="gotem-proof">
               <div class="gotem-proof-balls" aria-hidden="true">
@@ -1111,8 +1164,17 @@
         <div class="gotem-wrap">
           <img class="gotem-final-logo" src="/gotem-assets/logo.webp" alt="gotem" />
           <h2>go outside.<br />find your first.</h2>
-          <p>gotem is coming soon to iPhone.</p>
-          <a class="gotem-primary-cta" href="#top"><span>enter the wild</span><span aria-hidden="true">↑</span></a>
+          <p>Coming first to iPhone, then to Android.</p>
+          <div class="gotem-store-row" aria-label="gotem mobile release platforms">
+            <span class="gotem-store-badge" aria-label="Download on the App Store — coming first">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M17.05 12.54c-.03-3.14 2.57-4.67 2.69-4.74-1.47-2.15-3.76-2.44-4.57-2.46-1.92-.2-3.79 1.15-4.77 1.15-1 0-2.5-1.13-4.13-1.1-2.09.03-4.04 1.24-5.11 3.13-2.21 3.83-.56 9.46 1.55 12.56 1.06 1.51 2.29 3.2 3.92 3.14 1.59-.07 2.19-1.01 4.12-1.01 1.91 0 2.47 1.01 4.13.97 1.71-.03 2.79-1.52 3.81-3.04 1.22-1.73 1.71-3.43 1.73-3.52-.04-.01-3.28-1.25-3.31-5.08ZM13.92 3.3A4.58 4.58 0 0 0 14.97 0a4.67 4.67 0 0 0-3.02 1.57 4.38 4.38 0 0 0-1.08 3.17 3.86 3.86 0 0 0 3.05-1.44Z"/></svg>
+              <span class="gotem-store-copy"><small>Download on the</small><strong>App Store</strong></span>
+            </span>
+            <span class="gotem-store-badge gotem-store-badge--next" aria-label="Coming next on Google Play">
+              <svg viewBox="0 0 32 36" aria-hidden="true"><path fill="#34a853" d="M1.3 1.1A3 3 0 0 0 .5 3.2v29.6c0 .8.3 1.5.8 2.1L18 18 1.3 1.1Z"/><path fill="#4285f4" d="m23.5 12.4-5.5 5.5L1.3 1.1c.5-.4 1.2-.5 1.9-.1l20.3 11.4Z"/><path fill="#fbbc04" d="M31 16.6 23.5 12.4 18 18l5.5 5.6 7.5-4.2c1.1-.6 1.1-2.2 0-2.8Z"/><path fill="#ea4335" d="M3.2 35c-.7.4-1.4.3-1.9-.1L18 18l5.5 5.6L3.2 35Z"/></svg>
+              <span class="gotem-store-copy"><small>Coming next on</small><strong>Google Play</strong></span>
+            </span>
+          </div>
           <div class="gotem-ball-row" aria-hidden="true">
             <img src="/gotem-assets/ball-green.webp" alt="" />
             <img src="/gotem-assets/ball-blue.webp" alt="" />
