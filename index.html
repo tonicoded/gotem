@@ -311,6 +311,7 @@
       .gotem-phone::after { background: #9978ff; right: -28%; bottom: 2%; animation-delay: -7s; }
 
       .gotem-app-video,
+      .gotem-gameplay-fallback,
       .gotem-app-poster {
         position: absolute;
         inset: 9px;
@@ -321,7 +322,8 @@
         background: #fff;
       }
 
-      .gotem-app-video { display: block; }
+      .gotem-gameplay-fallback { z-index: 1; display: block; }
+      .gotem-app-video { z-index: 2; display: block; }
       .gotem-app-poster { display: none; }
 
       .gotem-screen-glass {
@@ -925,6 +927,7 @@
         .gotem-phone-shell { padding: 30px 0 54px; }
         .gotem-phone { border-radius: 29px; }
         .gotem-app-video,
+        .gotem-gameplay-fallback,
         .gotem-app-poster,
         .gotem-screen-glass { border-radius: 21px; }
         .gotem-live-badge { top: -14px; left: 17px; padding: 8px 11px; font-size: 15px; }
@@ -996,8 +999,10 @@
           <div class="gotem-phone-shell" aria-label="Real footage of the gotem welcome battle, catch, and card reveal">
             <div class="gotem-phone-glow"></div>
             <div class="gotem-phone">
-              <img class="gotem-app-video" data-gotem-gameplay src="/gotem-assets/gameplay-frames/frame-001.jpg" alt="gotem gameplay: a gorilla battles and catches a tiger, revealing collectible cards" />
-              <img class="gotem-app-poster" src="/gotem-assets/welcome-poster.webp" alt="A wild tiger facing Titanfist in gotem" />
+              <img class="gotem-gameplay-fallback" data-gotem-gameplay src="/gotem-assets/gameplay-frames/frame-001.jpg" alt="gotem gameplay fallback: a gorilla battles and catches a tiger, revealing collectible cards" />
+              <video class="gotem-app-video" autoplay muted loop playsinline preload="auto" poster="/gotem-assets/welcome-poster.webp" aria-label="gotem gameplay: a gorilla battles and catches a tiger, revealing collectible cards">
+                <source src="/gotem-assets/gotem-gameplay-loop.mp4" type="video/mp4" />
+              </video>
               <div class="gotem-screen-glass" aria-hidden="true"></div>
               <div class="gotem-live-badge" aria-hidden="true"><i></i> real gotem gameplay</div>
               <div class="gotem-demo-label" aria-hidden="true">battle → throw → reveal</div>
@@ -1128,23 +1133,47 @@
     <script>
       (() => {
         const gameplay = document.querySelector("[data-gotem-gameplay]");
-        if (!gameplay) return;
+        const video = document.querySelector(".gotem-app-video");
+        if (!gameplay && !video) return;
 
         const frameCount = 73;
         const frameDelay = 1000 / 6;
         const frameSource = (index) => `/gotem-assets/gameplay-frames/frame-${String(index).padStart(3, "0")}.jpg`;
         const frames = Array.from({ length: frameCount }, (_, index) => frameSource(index + 1));
 
-        frames.slice(1).forEach((src) => {
-          const image = new Image();
-          image.src = src;
-        });
+        if (gameplay) {
+          frames.slice(1).forEach((src) => {
+            const image = new Image();
+            image.src = src;
+          });
 
-        let frameIndex = 0;
-        window.setInterval(() => {
-          frameIndex = (frameIndex + 1) % frames.length;
-          gameplay.src = frames[frameIndex];
-        }, frameDelay);
+          let frameIndex = 0;
+          window.setInterval(() => {
+            frameIndex = (frameIndex + 1) % frames.length;
+            gameplay.src = frames[frameIndex];
+          }, frameDelay);
+        }
+
+        if (video) {
+          const showFallback = () => {
+            video.style.display = "none";
+          };
+          const keepVideoRunning = () => {
+            video.muted = true;
+            const playback = video.play();
+            if (playback && typeof playback.catch === "function") {
+              playback.catch(showFallback);
+            }
+          };
+
+          video.addEventListener("loadeddata", keepVideoRunning);
+          video.addEventListener("canplay", keepVideoRunning);
+          video.addEventListener("error", showFallback);
+          document.addEventListener("visibilitychange", () => {
+            if (!document.hidden) keepVideoRunning();
+          });
+          keepVideoRunning();
+        }
       })();
     </script>
   </body>
