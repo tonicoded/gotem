@@ -59,6 +59,8 @@
       .gotem-landing button,
       .gotem-landing a { -webkit-tap-highlight-color: transparent; }
 
+      .gotem-landing button { font: inherit; }
+
       .gotem-wrap {
         width: min(1200px, calc(100% - 48px));
         margin-inline: auto;
@@ -254,6 +256,7 @@
 
       .gotem-store-badge:hover { transform: translateY(-2px); box-shadow: 0 18px 38px rgba(0,0,0,.22); }
       .gotem-store-badge--next { opacity: 1; }
+      button.gotem-store-badge { cursor: pointer; text-align: left; }
       .gotem-store-badge svg { width: 33px; height: 36px; overflow: visible; }
       .gotem-store-copy { display: flex; flex-direction: column; align-items: flex-start; gap: 2px; font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; line-height: 1; }
       .gotem-store-copy small { font-size: 10px; font-weight: 500; letter-spacing: .025em; }
@@ -855,6 +858,35 @@
       .gotem-final .gotem-store-row { justify-content: center; margin-top: 30px; }
       .gotem-final .gotem-store-badge { color: #080808; background: #fff; border-color: #fff; box-shadow: 0 17px 42px rgba(0,0,0,.40); }
 
+      .gotem-waitlist {
+        width: min(540px, calc(100% - 28px));
+        padding: 0;
+        color: var(--ink);
+        border: 1px solid rgba(255,255,255,.16);
+        border-radius: 26px;
+        background: #fff;
+        box-shadow: 0 30px 100px rgba(0,0,0,.38);
+        overflow: hidden;
+      }
+
+      .gotem-waitlist::backdrop { background: rgba(8,8,8,.62); backdrop-filter: blur(12px); }
+      .gotem-waitlist-inner { position: relative; padding: 34px; }
+      .gotem-waitlist-topline { display: inline-flex; align-items: center; gap: 8px; margin-bottom: 20px; color: #656560; font-size: 18px; }
+      .gotem-waitlist-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--green); box-shadow: 0 0 0 5px rgba(34,199,136,.14); }
+      .gotem-waitlist h2 { margin: 0; font-size: clamp(48px, 10vw, 68px); font-weight: 400; line-height: .88; letter-spacing: -.025em; }
+      .gotem-waitlist-copy { margin: 17px 0 24px; color: #5e5e59; font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; font-size: 17px; line-height: 1.5; }
+      .gotem-waitlist-form { display: grid; gap: 10px; }
+      .gotem-waitlist-field { display: grid; grid-template-columns: 1fr auto; gap: 9px; padding: 7px; border: 1px solid rgba(0,0,0,.13); border-radius: 15px; background: #f5f5f2; }
+      .gotem-waitlist-field:focus-within { border-color: #080808; box-shadow: 0 0 0 3px rgba(0,0,0,.07); }
+      .gotem-waitlist-field input { min-width: 0; padding: 0 11px; color: #080808; border: 0; outline: 0; background: transparent; font: 17px/1.2 ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+      .gotem-waitlist-submit { min-height: 48px; padding: 0 18px; color: #fff; border: 0; border-radius: 10px; background: #080808; cursor: pointer; }
+      .gotem-waitlist-submit:disabled { cursor: wait; opacity: .55; }
+      .gotem-waitlist-status { min-height: 22px; margin: 2px 2px 0; color: #6b6b66; font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; font-size: 13px; line-height: 1.4; }
+      .gotem-waitlist-status[data-state="success"] { color: #11865e; }
+      .gotem-waitlist-status[data-state="error"] { color: #c5293a; }
+      .gotem-waitlist-close { position: absolute; top: 18px; right: 18px; width: 38px; height: 38px; display: grid; place-items: center; padding: 0; color: #080808; border: 1px solid rgba(0,0,0,.1); border-radius: 50%; background: #f5f5f2; cursor: pointer; }
+      .gotem-waitlist-privacy { margin: 16px 0 0; color: #8a8a84; font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; font-size: 12px; line-height: 1.4; }
+
       .gotem-ball-row { position: relative; margin: 70px auto 110px; display: flex; justify-content: center; align-items: center; gap: clamp(9px, 2vw, 25px); }
       .gotem-ball-row img { width: clamp(58px, 8vw, 112px); filter: drop-shadow(0 19px 23px rgba(0,0,0,.52)); transition: transform .25s ease; }
       .gotem-ball-row img:nth-child(even) { transform: translateY(25px); }
@@ -987,6 +1019,10 @@
         .gotem-store-badge svg { width: 27px; height: 31px; }
         .gotem-store-copy small { font-size: 8px; }
         .gotem-store-copy strong { font-size: 17px; }
+        .gotem-waitlist-inner { padding: 29px 20px 22px; }
+        .gotem-waitlist-field { grid-template-columns: 1fr; }
+        .gotem-waitlist-field input { min-height: 46px; }
+        .gotem-waitlist-submit { width: 100%; }
       }
 
       @media (prefers-reduced-motion: reduce) {
@@ -1030,10 +1066,10 @@
                 <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M17.05 12.54c-.03-3.14 2.57-4.67 2.69-4.74-1.47-2.15-3.76-2.44-4.57-2.46-1.92-.2-3.79 1.15-4.77 1.15-1 0-2.5-1.13-4.13-1.1-2.09.03-4.04 1.24-5.11 3.13-2.21 3.83-.56 9.46 1.55 12.56 1.06 1.51 2.29 3.2 3.92 3.14 1.59-.07 2.19-1.01 4.12-1.01 1.91 0 2.47 1.01 4.13.97 1.71-.03 2.79-1.52 3.81-3.04 1.22-1.73 1.71-3.43 1.73-3.52-.04-.01-3.28-1.25-3.31-5.08ZM13.92 3.3A4.58 4.58 0 0 0 14.97 0a4.67 4.67 0 0 0-3.02 1.57 4.38 4.38 0 0 0-1.08 3.17 3.86 3.86 0 0 0 3.05-1.44Z"/></svg>
                 <span class="gotem-store-copy"><small>Download on the</small><strong>App Store</strong></span>
               </span>
-              <span class="gotem-store-badge gotem-store-badge--next" aria-label="Coming next on Google Play">
+              <button class="gotem-store-badge gotem-store-badge--next gotem-waitlist-trigger" type="button" aria-label="Join the Google Play waitlist">
                 <svg viewBox="0 0 32 36" aria-hidden="true"><path fill="#34a853" d="M1.3 1.1A3 3 0 0 0 .5 3.2v29.6c0 .8.3 1.5.8 2.1L18 18 1.3 1.1Z"/><path fill="#4285f4" d="m23.5 12.4-5.5 5.5L1.3 1.1c.5-.4 1.2-.5 1.9-.1l20.3 11.4Z"/><path fill="#fbbc04" d="M31 16.6 23.5 12.4 18 18l5.5 5.6 7.5-4.2c1.1-.6 1.1-2.2 0-2.8Z"/><path fill="#ea4335" d="M3.2 35c-.7.4-1.4.3-1.9-.1L18 18l5.5 5.6L3.2 35Z"/></svg>
-                <span class="gotem-store-copy"><small>Coming next on</small><strong>Google Play</strong></span>
-              </span>
+                <span class="gotem-store-copy"><small>Join the waitlist</small><strong>Google Play</strong></span>
+              </button>
             </div>
             <div class="gotem-proof">
               <div class="gotem-proof-balls" aria-hidden="true">
@@ -1169,10 +1205,10 @@
               <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M17.05 12.54c-.03-3.14 2.57-4.67 2.69-4.74-1.47-2.15-3.76-2.44-4.57-2.46-1.92-.2-3.79 1.15-4.77 1.15-1 0-2.5-1.13-4.13-1.1-2.09.03-4.04 1.24-5.11 3.13-2.21 3.83-.56 9.46 1.55 12.56 1.06 1.51 2.29 3.2 3.92 3.14 1.59-.07 2.19-1.01 4.12-1.01 1.91 0 2.47 1.01 4.13.97 1.71-.03 2.79-1.52 3.81-3.04 1.22-1.73 1.71-3.43 1.73-3.52-.04-.01-3.28-1.25-3.31-5.08ZM13.92 3.3A4.58 4.58 0 0 0 14.97 0a4.67 4.67 0 0 0-3.02 1.57 4.38 4.38 0 0 0-1.08 3.17 3.86 3.86 0 0 0 3.05-1.44Z"/></svg>
               <span class="gotem-store-copy"><small>Download on the</small><strong>App Store</strong></span>
             </span>
-            <span class="gotem-store-badge gotem-store-badge--next" aria-label="Coming next on Google Play">
+            <button class="gotem-store-badge gotem-store-badge--next gotem-waitlist-trigger" type="button" aria-label="Join the Google Play waitlist">
               <svg viewBox="0 0 32 36" aria-hidden="true"><path fill="#34a853" d="M1.3 1.1A3 3 0 0 0 .5 3.2v29.6c0 .8.3 1.5.8 2.1L18 18 1.3 1.1Z"/><path fill="#4285f4" d="m23.5 12.4-5.5 5.5L1.3 1.1c.5-.4 1.2-.5 1.9-.1l20.3 11.4Z"/><path fill="#fbbc04" d="M31 16.6 23.5 12.4 18 18l5.5 5.6 7.5-4.2c1.1-.6 1.1-2.2 0-2.8Z"/><path fill="#ea4335" d="M3.2 35c-.7.4-1.4.3-1.9-.1L18 18l5.5 5.6L3.2 35Z"/></svg>
-              <span class="gotem-store-copy"><small>Coming next on</small><strong>Google Play</strong></span>
-            </span>
+              <span class="gotem-store-copy"><small>Join the waitlist</small><strong>Google Play</strong></span>
+            </button>
           </div>
           <div class="gotem-ball-row" aria-hidden="true">
             <img src="/gotem-assets/ball-green.webp" alt="" />
@@ -1188,6 +1224,27 @@
         </footer>
       </section>
     </main>
+    <dialog class="gotem-waitlist" aria-labelledby="gotem-waitlist-title">
+      <div class="gotem-waitlist-inner">
+        <button class="gotem-waitlist-close" type="button" aria-label="Close waitlist">×</button>
+        <div class="gotem-waitlist-topline"><span class="gotem-waitlist-dot"></span> android transmission incoming</div>
+        <h2 id="gotem-waitlist-title">be first on<br />Google Play.</h2>
+        <p class="gotem-waitlist-copy">Drop your email and we’ll let you know the moment gotem lands on Android.</p>
+        <form class="gotem-waitlist-form" action="https://formsubmit.co/ajax/anthonyvvza@gmail.com" method="POST">
+          <input type="hidden" name="_subject" value="New gotem Android waitlist signup" />
+          <input type="hidden" name="_template" value="table" />
+          <input type="hidden" name="source" value="gotem website — Google Play waitlist" />
+          <input type="text" name="_honey" tabindex="-1" autocomplete="off" style="display:none" />
+          <label class="gotem-waitlist-field">
+            <span style="position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0">Email address</span>
+            <input type="email" name="email" placeholder="you@email.com" autocomplete="email" inputmode="email" required />
+            <button class="gotem-waitlist-submit" type="submit">join waitlist →</button>
+          </label>
+          <p class="gotem-waitlist-status" role="status" aria-live="polite">One email when Android is ready. No spam.</p>
+        </form>
+        <p class="gotem-waitlist-privacy">By joining, you agree that gotem may use your email only for Android launch updates. <a href="/privacy/">Privacy</a>.</p>
+      </div>
+    </dialog>
     <script>
       (() => {
         const video = document.querySelector(".gotem-app-video");
@@ -1218,6 +1275,63 @@
           if (!document.hidden) keepVideoRunning();
         });
         keepVideoRunning();
+      })();
+
+      (() => {
+        const dialog = document.querySelector(".gotem-waitlist");
+        const form = document.querySelector(".gotem-waitlist-form");
+        const email = form?.querySelector('input[type="email"]');
+        const submit = form?.querySelector(".gotem-waitlist-submit");
+        const status = form?.querySelector(".gotem-waitlist-status");
+        if (!dialog || !form || !email || !submit || !status) return;
+
+        document.querySelectorAll(".gotem-waitlist-trigger").forEach((trigger) => {
+          trigger.addEventListener("click", () => {
+            status.textContent = "One email when Android is ready. No spam.";
+            status.removeAttribute("data-state");
+            dialog.showModal();
+            requestAnimationFrame(() => email.focus());
+          });
+        });
+
+        dialog.querySelector(".gotem-waitlist-close")?.addEventListener("click", () => dialog.close());
+        dialog.addEventListener("click", (event) => {
+          if (event.target === dialog) dialog.close();
+        });
+
+        form.addEventListener("submit", async (event) => {
+          event.preventDefault();
+          if (!form.reportValidity()) return;
+          submit.disabled = true;
+          submit.textContent = "sending...";
+          status.textContent = "Adding you to the Android waitlist...";
+          status.removeAttribute("data-state");
+
+          try {
+            const response = await fetch(form.action, {
+              method: "POST",
+              body: new FormData(form),
+              headers: { Accept: "application/json" }
+            });
+            const result = await response.json().catch(() => ({}));
+            if (!response.ok || result.success === "false" || result.success === false) throw new Error("signup failed");
+            form.reset();
+            status.textContent = "You’re on the list — see you in the wild.";
+            status.setAttribute("data-state", "success");
+            submit.textContent = "joined ✓";
+          } catch {
+            status.textContent = "Couldn’t join right now. Please try again.";
+            status.setAttribute("data-state", "error");
+            submit.textContent = "try again →";
+            submit.disabled = false;
+            return;
+          }
+
+          window.setTimeout(() => {
+            submit.disabled = false;
+            submit.textContent = "join waitlist →";
+          }, 2500);
+        });
       })();
     </script>
   </body>
