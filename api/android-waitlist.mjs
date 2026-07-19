@@ -1,8 +1,7 @@
-import { get, put } from "@vercel/blob";
-
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-const WAITLIST_PATH = "android-waitlist.json";
-const MAX_STORAGE_ATTEMPTS = 5;
+const SUPABASE_URL = process.env.SUPABASE_URL || "https://gcxiaiemgyjhxmwqjgew.supabase.co";
+const SUPABASE_ANON_KEY = process.env.SUPABASE_ANON_KEY ||
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdjeGlhaWVtZ3lqaHhtd3FqZ2V3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODI3OTE4NzQsImV4cCI6MjA5ODM2Nzg3NH0.p96Q1lzl01viGUfTs0jVdid-t7R9jVCqq0xhRPnRnE4";
 
 function parseBody(body) {
   if (typeof body !== "string") return body ?? {};
@@ -13,48 +12,27 @@ function parseBody(body) {
   }
 }
 
-async function readWaitlist() {
-  const storedWaitlist = await get(WAITLIST_PATH, {
-    access: "private",
-    useCache: false
+async function addToWaitlist(email) {
+  const result = await fetch(`${SUPABASE_URL}/rest/v1/rpc/join_android_waitlist`, {
+    method: "POST",
+    headers: {
+      Accept: "application/json",
+      apikey: SUPABASE_ANON_KEY,
+      Authorization: `Bearer ${SUPABASE_ANON_KEY}`,
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      p_email: email,
+      p_source: "gotem website - Google Play waitlist"
+    })
   });
 
-  if (!storedWaitlist) return { entries: [], etag: null };
-
-  const contents = await new Response(storedWaitlist.stream).text();
-  const entries = JSON.parse(contents);
-
-  if (!Array.isArray(entries)) {
-    throw new TypeError("Stored Android waitlist is not a JSON array");
+  if (!result.ok) {
+    const details = await result.text();
+    throw new Error(`Supabase waitlist request failed (${result.status}): ${details}`);
   }
 
-  return { entries, etag: storedWaitlist.blob.etag };
-}
-
-async function addToWaitlist(record) {
-  for (let attempt = 0; attempt < MAX_STORAGE_ATTEMPTS; attempt += 1) {
-    try {
-      const { entries, etag } = await readWaitlist();
-
-      if (entries.some((entry) => entry?.email === record.email)) return;
-
-      const options = {
-        access: "private",
-        allowOverwrite: Boolean(etag),
-        contentType: "application/json",
-        cacheControlMaxAge: 60
-      };
-
-      // Prevent two simultaneous submissions from overwriting each other.
-      if (etag) options.ifMatch = etag;
-
-      await put(WAITLIST_PATH, JSON.stringify([...entries, record], null, 2), options);
-      return;
-    } catch (error) {
-      if (attempt === MAX_STORAGE_ATTEMPTS - 1) throw error;
-      await new Promise((resolve) => setTimeout(resolve, 25 * 2 ** attempt));
-    }
-  }
+  return result.json();
 }
 
 export default async function handler(request, response) {
@@ -77,15 +55,9 @@ export default async function handler(request, response) {
     return response.status(400).json({ success: false, message: "Enter a valid email address" });
   }
 
-  const record = {
-    email,
-    joinedAt: new Date().toISOString(),
-    source: "gotem website — Google Play waitlist"
-  };
-
   try {
-    await addToWaitlist(record);
-    return response.status(200).json({ success: true });
+    const inserted = await addToWaitlist(email);
+    return response.status(200).json({ success: true, alreadyRegistered: inserted !== true });
   } catch (error) {
     console.error("Android waitlist storage failed", error);
     return response.status(503).json({ success: false, message: "Waitlist temporarily unavailable" });
